@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 
 from database import start_db, check_url, get_redirect_url
-from validators import ValidationError, url as urlValidator
+from validators import url as urlValidator
 
 app = Flask(__name__)
 CORS(app)
@@ -28,14 +28,14 @@ def checkUrl():
     try:
         orig_url: str = request.get_json()["url"]
         validation_success = urlValidator(orig_url)
-        if validation_success is True:
+        if validation_success == True:
             new_url = jsonify((check_url(orig_url)))
             return new_url
         else:
-            raise ValidationError({"error": "Invalid url."})
+            return {"error": "Invalid url."}
 
-    except ValidationError as err:
-        return jsonify(err)
+    except:
+        return {"error": "Invalid url."}
 
 
 if __name__ == "__main__":
