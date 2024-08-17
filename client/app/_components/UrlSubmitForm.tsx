@@ -25,7 +25,7 @@ export default function UrlSubmitForm() {
     })
     const formUrl = form.getValues().url
 
-    const { urlQuery, checkForExistingUrl } = useCheckExistingUrl(formUrl)
+    const { urlQuery, checkForExistingUrl, urlFetchingError } = useCheckExistingUrl(formUrl)
 
     const shortedUrlHref = `${env.NEXT_PUBLIC_BASE_URL}/${urlQuery?.shortened_url}`
     const originalUrlHref = urlQuery?.original_url as string
@@ -67,8 +67,11 @@ export default function UrlSubmitForm() {
                 <CardFooter>
 
                     <FetchedUrlTable original_url={originalUrlHref} shortened_url={shortedUrlHref} />
-                </CardFooter>
-            }
+                </CardFooter>}
+            {urlFetchingError &&
+                <CardFooter>
+                    <p>{JSON.stringify(urlFetchingError)}</p>
+                </CardFooter>}
         </Card>
     )
 }
